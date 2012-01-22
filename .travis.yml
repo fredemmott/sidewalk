@@ -6,5 +6,9 @@ rvm:
  - 1.9.2
  - 1.9.3
  - ree
- - jruby-18mode
- - rbx-18mode
+# Sidewalk needs features of Ruby 1.9's regexp library; this is available
+# for 1.8, with a native library and C extension. Unfortunately, it's not
+# currently compatible with jruby or rubinius. That will hopefully change
+# when Ruby 1.9 is stable on these runtimes.
+# - jruby-18mode
+# - rbx-18mode
