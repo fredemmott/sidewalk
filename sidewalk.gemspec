@@ -9,6 +9,8 @@ gemspec = Gem::Specification.new do |s|
   s.require_paths = ['lib']
   s.files = Dir['lib/**/*']
 
+  s.add_dependency 'rack', '~>1.4'
+
   if RUBY_VERSION.start_with? '1.8'
     s.add_dependency 'oniguruma', '~> 1.1'
   end
