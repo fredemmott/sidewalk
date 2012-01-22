@@ -8,6 +8,12 @@ describe Sidewalk::Regexp do
     match[:bar].should == '123'
   end
 
+  it 'supports listing names' do
+    reg = Sidewalk::Regexp.new('foo(?<bar>\d+)baz')
+    match = reg.match 'foo123baz'
+    match.names.should include 'bar'
+  end
+
   it 'supports #post_match' do
     reg = Sidewalk::Regexp.new('herpity')
     match = reg.match 'herpity derpity'
