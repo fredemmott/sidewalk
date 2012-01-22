@@ -56,7 +56,7 @@ module Sidewalk
         else
           params = {}
           match.names.each do |name|
-            value = match[name]
+            value = match[name.to_sym]
             params[name.to_sym] = value if value
           end
 
