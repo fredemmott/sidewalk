@@ -55,9 +55,17 @@ module Sidewalk
           return map(stack, next_map, match.post_match)
         else
           params = {}
-          match.names.each do |name|
-            value = match[name.to_sym]
-            params[name.to_sym] = value if value
+          match.names.map.each do |name|
+            # the symbol vs string stuff is because of differences between
+            # Regexp on Ruby 1.9 and Oniguruma::ORegexp on Ruby 1.8
+            symbol = name.to_sym
+            string = name.to_s
+
+            value = match[symbol]
+            if value
+              params[string] = value
+              params[symbol] = value
+            end
           end
 
           return UriMatch.new(
