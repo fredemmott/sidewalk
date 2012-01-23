@@ -1,14 +1,23 @@
 require 'sidewalk/regexp'
 require 'sidewalk/uri_match'
 
+require 'active_support/inflector'
+
 module Sidewalk
+  autoload :Application, 'sidewalk/application'
+
   class UriMapper
     attr_reader :uri_map
     def initialize uri_map = {}
       unless uri_map.is_a? Hash
         raise ArgumentError.new('URI map must be a Hash')
       end
+      $LOAD_PATH.push File.join(
+        Sidewalk::Application.local_root,
+        'controllers'
+      )
       @uri_map = Sidewalk::UriMapper.convert_map(uri_map)
+      $LOAD_PATH.pop
     end
 
     def map path
@@ -44,10 +53,9 @@ module Sidewalk
         elsif value.to_s.end_with? 'Controller'
           # Attempt to load the class
           begin
-            underscored = value.to_s.gsub(/([a-z])([A-Z])/, '\1_\2').downcase
-            out[key] = const_get(value)
+            out[key] = value.to_s.constantize
           rescue NameError
-            require underscored
+            require value.to_s.underscore
             retry
           end
         else

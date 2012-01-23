@@ -10,7 +10,6 @@ module Sidewalk
     end
 
     def initialize urimap
-      $LOAD_PATH.push Sidewalk::Application.local_root
       @mapper = Sidewalk::UriMapper.new(urimap)
     end
 

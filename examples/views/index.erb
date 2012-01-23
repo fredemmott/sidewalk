@@ -1,0 +1,12 @@
+<html>
+  <head>
+    <title>Sidewalk Examples</title>
+  </head>
+  <body>
+    <ul>
+<% @links.each do |text, url| %>
+      <li><a href="<%= h url %>"><%= h text %></a></li>
+<% end %>
+    </ul>
+  </body>
+</html>
