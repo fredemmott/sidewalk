@@ -2,7 +2,7 @@ require 'rxhp'
 
 class IndexController < Sidewalk::Controller
   include Rxhp::Html
-  def content
+  def payload
     rows = {
       'hello' => 'Hello example',
     }.map do |path, text|

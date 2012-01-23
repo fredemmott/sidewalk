@@ -7,10 +7,10 @@ module Sidewalk
     end
 
     def response
-      [200, {'Content-Type' => 'text/html'}, [content]]
+      [200, {'Content-Type' => 'text/html'}, [payload]]
     end
 
-    def content
+    def payload
       raise NotImplementedError.new
     end
   end

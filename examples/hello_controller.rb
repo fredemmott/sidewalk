@@ -1,5 +1,5 @@
 class HelloController < Sidewalk::Controller
-  def content
+  def payload
     "Hello, world."
   end
 end
