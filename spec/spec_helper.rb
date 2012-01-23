@@ -1,7 +1,9 @@
-require 'simplecov'
-SimpleCov.start do
-  add_filter '/spec/'
-  add_filter '/lib/sidewalk/regexp.rb' # 1.8 vs 1.9
+unless RUBY_VERSION.start_with? '1.8.'
+  require 'simplecov'
+  SimpleCov.start do
+    add_filter '/spec/'
+    add_filter '/lib/sidewalk/regexp.rb' # 1.8 vs 1.9
+  end
 end
 
 def read_data_file(name)
