@@ -5,7 +5,7 @@ gemspec = Gem::Specification.new do |s|
   s.authors = ['Fred Emmott']
   s.email = ['sidewalk-gem@fredemmott.co.uk']
   s.homepage = 'https://github.com/fredemmott/sidewalk'
-  s.summary = 'TODO'
+  s.summary = 'A lightweight web framework'
   s.require_paths = ['lib']
   s.files = Dir['lib/**/*']
 
