@@ -19,7 +19,10 @@ module Sidewalk
       )
     end
 
-    # Replace string keys with Sidewalk::Regexp instances
+    # Convert uri_map from easy-to-write to fast-to-use.
+    #
+    # - Replace string keys with Sidewalk::Regexp instances
+    # - Attempt to load classes for symbols
     def self.convert_map uri_map
       out = {}
       uri_map.each do |key, value|
@@ -36,6 +39,17 @@ module Sidewalk
         key = Sidewalk::Regexp.new(key)
         if value.is_a? Hash
           out[key] = convert_map(value)
+        elsif value.is_a? Class
+          out[key] = value
+        elsif value.to_s.end_with? 'Controller'
+          # Attempt to load the class
+          begin
+            underscored = value.to_s.gsub(/([a-z])([A-Z])/, '\1_\2').downcase
+            out[key] = const_get(value)
+          rescue NameError
+            require underscored
+            retry
+          end
         else
           out[key] = value
         end

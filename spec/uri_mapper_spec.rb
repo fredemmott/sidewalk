@@ -1,6 +1,9 @@
 require 'spec_helper'
 require 'sidewalk/uri_mapper'
 
+class FooController
+end
+
 describe Sidewalk::UriMapper do
   it 'can be default-constructed' do
     lambda { Sidewalk::UriMapper.new }.should_not raise_error
@@ -119,6 +122,32 @@ describe Sidewalk::UriMapper do
         match.controller.should be :capture
         match.parameters[:id].to_s.should == '123'
       end
+    end
+  end
+
+  it 'adds an implicit ^' do
+    map = {
+      '$' => nil,
+      'foo' => nil,
+      '^bar' => nil,
+    }
+    keys = Sidewalk::UriMapper.new(map).uri_map.keys.map(&:source)
+    keys.should include '^$'
+    keys.should include '^foo'
+    keys.should include '^foo'
+  end
+
+  context 'autoloading' do
+    it 'converts symbols to classes' do
+      map = { '$' => :FooController }
+      Sidewalk::UriMapper.new(map).uri_map.values.should include FooController
+    end
+
+    it 'attempts to require controller classes' do
+      map = { '$' => :BarController }
+      lambda do
+        Sidewalk::UriMapper.new(map)
+      end.should raise_error(LoadError)
     end
   end
 end
