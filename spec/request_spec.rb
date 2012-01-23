@@ -63,18 +63,18 @@ describe Sidewalk::Request do
     end
   end
 
-  describe '#request_uri' do
+  describe '#uri' do
     it 'should return a URI::HTTP' do
-      @req.request_uri.should be_a URI::HTTP
+      @req.uri.should be_a URI::HTTP
     end
 
     it 'should include the full URI with query string' do
       full = 'http://localhost:9292/foo/bar?baz'
-      @req.request_uri.to_s.should == full
+      @req.uri.to_s.should == full
     end
 
     it 'should return a duplicate' do
-      @req.request_uri.should_not equal @req.request_uri
+      @req.uri.should_not equal @req.uri
     end
   end
 

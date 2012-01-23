@@ -19,7 +19,7 @@ module Sidewalk
       @root_uri.dup
     end
 
-    def request_uri
+    def uri
       @request_uri.dup
     end
 
