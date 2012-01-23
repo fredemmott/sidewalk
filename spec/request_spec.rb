@@ -57,6 +57,10 @@ describe Sidewalk::Request do
     it 'should point at the root of the app' do
       @req.root_uri.to_s.should == 'http://localhost:9292/'
     end
+
+    it 'should return a duplicate' do
+      @req.root_uri.should_not equal @req.root_uri
+    end
   end
 
   describe '#request_uri' do
@@ -67,6 +71,10 @@ describe Sidewalk::Request do
     it 'should include the full URI with query string' do
       full = 'http://localhost:9292/foo/bar?baz'
       @req.request_uri.to_s.should == full
+    end
+
+    it 'should return a duplicate' do
+      @req.request_uri.should_not equal @req.request_uri
     end
   end
 

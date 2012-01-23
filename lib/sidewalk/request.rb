@@ -5,7 +5,6 @@ require 'uri'
 
 module Sidewalk
   class Request
-    attr_reader :root_uri, :request_uri
     def initialize env
       @env = env
       @rack_version = env['rack.version']
@@ -14,6 +13,14 @@ module Sidewalk
       @rack_request = Rack::Request.new(@env)
 
       initialize_uris
+    end
+
+    def root_uri
+      @root_uri.dup
+    end
+
+    def request_uri
+      @request_uri.dup
     end
 
     def secure?
