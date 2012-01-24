@@ -22,11 +22,18 @@ module Sidewalk
 
       match = @mapper.map path_info
       if match
-        controller = match.controller.new(
+        if match.controller.is_a? Class
+          responder = lambda do |request, logger|
+            match.controller.new(request, logger).response
+          end
+        else
+          responder = match.controller
+        end
+
+        responder.call(
           Sidewalk::Request.new(env),
           ::Logger.new(env['rack.error'])
         )
-        controller.response
       else
         [404, {'Content-Type' => 'text/plain'}, ['not found']]
       end

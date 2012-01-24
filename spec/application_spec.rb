@@ -56,7 +56,10 @@ describe Sidewalk::Application do
       body.join('').should == 'whee'
     end
 
-    it 'should support Proc responders'
+    it 'should support Proc responders' do
+      env = create_rack_env('PATH_INFO' => '/proc')
+      @app.call(env).should == :herp
+    end
 
     it 'should have passed the UriMatch to the Request'
   end
