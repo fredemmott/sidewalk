@@ -41,6 +41,7 @@ describe Sidewalk::Application do
     end
 
   end
+
   describe '#call' do
     before :each do
       @request, @logger = nil, nil
@@ -72,6 +73,12 @@ describe Sidewalk::Application do
       @request.uri_match.parameters.should be_empty
       @request.uri_match.controller.should be @proc_responder
       @request.uri_match.parts.should == ['proc']
+    end
+
+    it 'should return a status of 404 when given an invalid path' do
+      env = create_rack_env('PATH_INFO' => '/4oh4')
+      status, headers, parts = @app.call(env)
+      status.should == 404
     end
   end
 end
