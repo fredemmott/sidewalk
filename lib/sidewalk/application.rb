@@ -22,6 +22,8 @@ module Sidewalk
 
       match = @mapper.map path_info
       if match
+        env['sidewalk.urimatch'] = match
+
         if match.controller.is_a? Class
           responder = lambda do |request, logger|
             match.controller.new(request, logger).response

@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 require 'sidewalk/application'
 require 'sidewalk/controller'
 
@@ -42,9 +44,10 @@ describe Sidewalk::Application do
   describe '#call' do
     before :each do
       @request, @logger = nil, nil
+      @proc_responder = lambda{ |*args| @request, @logger = *args; :herp }
       @uri_map = {
         'class' => FooController,
-        'proc' => lambda { |*args| @request, @logger = *args; :herp },
+        'proc' => @proc_responder,
       }
       @app = Sidewalk::Application.new(@uri_map)
     end
@@ -61,6 +64,14 @@ describe Sidewalk::Application do
       @app.call(env).should == :herp
     end
 
-    it 'should have passed the UriMatch to the Request'
+    it 'should have passed the UriMatch to the Request' do
+      env = create_rack_env('PATH_INFO' => '/proc')
+      @app.call(env)
+
+      @request.uri_match.should be
+      @request.uri_match.parameters.should be_empty
+      @request.uri_match.controller.should be @proc_responder
+      @request.uri_match.parts.should == ['proc']
+    end
   end
 end
