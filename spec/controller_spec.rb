@@ -52,4 +52,51 @@ describe Sidewalk::Controller do
       body.should == [@payload]
     end
   end
+
+  describe '.current' do
+    it 'should return nil if not called from #payload' do
+      Sidewalk::Controller.current.should be_nil
+    end
+
+    it 'should return the controller if called from #payload' do
+      it = Sidewalk::Controller.new(nil, nil)
+      class <<it
+        attr_accessor :current
+        def payload
+          self.current = Sidewalk::Controller.current
+        end
+      end
+      it.response
+      it.current.should == it
+    end
+
+    context 'with two controllers active in the same thread' do
+      it 'should return the correct one from #payload' do
+        outer = Sidewalk::Controller.new(nil, nil)
+        class <<outer
+          attr_accessor :inner
+          attr_accessor :pre
+          attr_accessor :post
+          def payload
+            self.pre = Sidewalk::Controller.current
+            inner.response
+            self.post = Sidewalk::Controller.current
+          end
+        end
+        inner = Sidewalk::Controller.new(nil, nil)
+        class <<inner
+          attr_accessor :current
+          def payload
+            self.current = Sidewalk::Controller.current
+          end
+        end
+        outer.inner = inner
+        outer.response
+
+        outer.pre.should == outer
+        outer.post.should == outer
+        inner.current.should == inner
+      end
+    end
+  end
 end

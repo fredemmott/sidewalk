@@ -1,3 +1,5 @@
+require 'continuation' unless RUBY_VERSION.start_with? '1.8.'
+
 module Sidewalk
   class Controller
     attr_reader :request, :logger
@@ -7,7 +9,10 @@ module Sidewalk
     end
 
     def response
-      [200, {'Content-Type' => 'text/html'}, [payload]]
+      response = nil
+      catch(:sidewalk_controller_current) do
+        return [200, {'Content-Type' => 'text/html'}, [payload]]
+      end.call(self)
     end
 
     def relative_uri path
@@ -18,6 +23,14 @@ module Sidewalk
 
     def payload
       raise NotImplementedError.new
+    end
+
+    def self.current
+      begin
+        callcc{|cc| throw(:sidewalk_controller_current, cc)}
+      rescue NameError, ArgumentError
+        nil
+      end
     end
   end
 end
