@@ -143,6 +143,11 @@ describe Sidewalk::UriMapper do
       Sidewalk::UriMapper.new(map).uri_map.values.should include FooController
     end
 
+    it 'converts strings to classes' do
+      map = { '$' => 'FooController' }
+      Sidewalk::UriMapper.new(map).uri_map.values.should include FooController
+    end
+
     it 'attempts to require controller classes' do
       map = { '$' => :BarController }
       lambda do

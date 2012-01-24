@@ -1,17 +1,14 @@
 require 'spec_helper'
 require 'sidewalk/request'
-require 'yaml'
 
 describe Sidewalk::Request do
   before :each do
-    @env = YAML.load(read_data_file('request_spec_1.yaml'))
     @match = Sidewalk::UriMatch.new(
       [:a, :b],
       {'foo' => :bar},
       :my_controller
     )
-    @env['rack.input'] = StringIO.new
-    @env['sidewalk.urimatch'] = @match
+    @env = create_rack_env('sidewalk.urimatch' => @match)
     @req = Sidewalk::Request.new(@env)
   end
 

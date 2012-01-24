@@ -5,8 +5,9 @@ autoload :Logger, 'logger'
 
 module Sidewalk
   class Application
+    attr_reader :mapper
     def self.local_root
-      @local_root ||= File.expand_path(Dir.pwd)
+      @local_root ||= Dir.pwd
     end
 
     def initialize urimap
