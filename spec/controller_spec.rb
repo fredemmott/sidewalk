@@ -23,9 +23,12 @@ describe Sidewalk::Controller do
 
   describe '#response' do
     before :each do
-      @payload = payload = rand.to_s
+      @payload = rand.to_s
       @controller = Sidewalk::Controller.new(nil, nil)
-      @controller.define_singleton_method(:payload){ payload }
+      class <<@controller
+        attr_accessor :payload
+      end
+      @controller.payload = @payload
     end
 
     it 'should call #payload' do
