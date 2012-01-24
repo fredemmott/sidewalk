@@ -59,7 +59,9 @@ module Sidewalk
         @secure = true
         uri_class = URI::HTTPS
       else
-        raise "Unknown URL scheme: #{@env['rack.url_scheme'].inspect}"
+        raise ArgumentError.new(
+          "Unknown URL scheme: #{@env['rack.url_scheme'].inspect}"
+        )
       end
 
       root = @env['SCRIPT_NAME']
@@ -85,10 +87,14 @@ module Sidewalk
     def sanity_check!
       # Sanity checks
       unless @rack_version
-        raise ArgumentError.new "env doesn't specify a Rack version"
+        raise ArgumentError.new(
+          "env doesn't specify a Rack version"
+        )
       end
       if @rack_version != [1, 1]
-        raise "Expected Rack version [1, 1], got #{@rack_version}"
+        raise ArgumentError.new(
+          "Expected Rack version [1, 1], got #{@rack_version}"
+        )
       end
     end
   end
