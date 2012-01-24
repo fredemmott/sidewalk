@@ -55,7 +55,7 @@ module Sidewalk
       def render view = nil
         view ||= self.class.name.sub('Controller', '').underscore
         template = Sidewalk::ControllerMixins::ViewTemplates.template(view)
-        template.render(binding)
+        template.render(self)
       end
     end
   end

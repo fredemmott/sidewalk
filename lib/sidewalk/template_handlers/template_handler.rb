@@ -8,11 +8,11 @@ module Sidewalk
       # Re
       #
       # It should return a Proc that:
-      # - takes a binding as a parameter
+      # - takes a controller instance as a parameter
       # - returns a string
       #
       # This method is called with a full path to a template file.
-      def render binding
+      def render controller
         raise NotImplementedError.new
       end
     end
