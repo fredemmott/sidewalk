@@ -8,11 +8,14 @@ module Sidewalk
       @request, @logger = request, logger
     end
 
-    def response
-      response = nil
+    def call
       catch(:sidewalk_controller_current) do
-        return [200, {'Content-Type' => 'text/html'}, [payload]]
+        return response
       end.call(self)
+    end
+
+    def response
+      [200, {'Content-Type' => 'text/html'}, [payload]]
     end
 
     def relative_uri path

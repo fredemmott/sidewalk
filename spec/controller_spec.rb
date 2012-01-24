@@ -21,7 +21,7 @@ describe Sidewalk::Controller do
     end
   end
 
-  describe '#response' do
+  describe '#call' do
     before :each do
       @payload = rand.to_s
       @controller = Sidewalk::Controller.new(nil, nil)
@@ -33,22 +33,22 @@ describe Sidewalk::Controller do
 
     it 'should call #payload' do
       @controller.should_receive(:payload).and_return(@payload)
-      @controller.response
+      @controller.call
     end
 
     it 'should give a 200 status by default' do
-      status, headers, body = @controller.response
+      status, headers, body = @controller.call
       status.should == 200
     end
 
     it 'should have a default content-type of text/html' do
-      status, headers, body = @controller.response
+      status, headers, body = @controller.call
       headers.should include 'Content-Type'
       headers['Content-Type'].should == 'text/html'
     end
 
     it 'should return the result of #payload as the only content' do
-      status, headers, body = @controller.response
+      status, headers, body = @controller.call
       body.should == [@payload]
     end
   end
@@ -66,7 +66,7 @@ describe Sidewalk::Controller do
           self.current = Sidewalk::Controller.current
         end
       end
-      it.response
+      it.call
       it.current.should == it
     end
 
@@ -79,7 +79,7 @@ describe Sidewalk::Controller do
           attr_accessor :post
           def payload
             self.pre = Sidewalk::Controller.current
-            inner.response
+            inner.call
             self.post = Sidewalk::Controller.current
           end
         end
@@ -91,7 +91,7 @@ describe Sidewalk::Controller do
           end
         end
         outer.inner = inner
-        outer.response
+        outer.call
 
         outer.pre.should == outer
         outer.post.should == outer
