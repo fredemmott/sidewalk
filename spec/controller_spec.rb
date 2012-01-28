@@ -9,6 +9,14 @@ describe Sidewalk::Controller do
     end
   end
 
+  describe '#headers' do
+    it 'should include the Content-Type' do
+      controller = Sidewalk::Controller.new(nil, nil)
+      controller.headers.should include 'Content-Type'
+      controller.headers['Content-Type'].should == 'text/html'
+    end
+  end
+
   describe '#call' do
     before :each do
       @response = rand.to_s

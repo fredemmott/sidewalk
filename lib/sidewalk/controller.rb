@@ -16,6 +16,24 @@ module Sidewalk
   # * implement {#response}
   # * add your class to your application URI map.
   class Controller
+    # Initialize a new controller instance.
+    #
+    # @param [Request] request has information on the HTTP request.
+    # @param [Logger] logger is something implement the same interface as
+    #   Ruby's +Logger+ class.
+    def initialize request, logger
+      @request, @logger = request, logger
+      @status = 200
+      @headers = {
+        'Content-Type' => 'text/html'
+      }
+    end
+
+    # The response headers.
+    #
+    # For request headers, see {#request} and {Request#headers}.
+    attr_reader :headers
+
     # The instance of {Request} corresponding to the current HTTP request.
     attr_reader :request
 
@@ -32,17 +50,12 @@ module Sidewalk
     # What mime-type to return to the user agent.
     #
     # "text/html" is the default.
-    attr_accessor :content_type
+    def content_type
+      headers['Content-Type']
+    end
 
-    # Initialize a new controller instance.
-    #
-    # @param [Request] request has information on the HTTP request.
-    # @param [Logger] logger is something implement the same interface as
-    #   Ruby's +Logger+ class.
-    def initialize request, logger
-      @request, @logger = request, logger
-      @status = 200
-      @content_type = 'text/html'
+    def content_type= value
+      headers['Content-Type'] = value
     end
 
     # Actually respond to the request.
