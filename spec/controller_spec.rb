@@ -17,6 +17,69 @@ describe Sidewalk::Controller do
     end
   end
 
+  describe '#set_cookie' do
+    before :each do
+      @controller = Sidewalk::Controller.new(nil, nil)
+    end
+
+    it 'sets a Set-Cookie header for a cookie' do
+      @controller.set_cookie 'foo', 'bar'
+      @controller.headers.should include 'Set-Cookie'
+      @controller.headers['Set-Cookie'].should == 'foo=bar'
+    end
+
+    it 'sets a Set-Cookie header array for 2 cookies' do
+      @controller.set_cookie 'foo', 'bar'
+      @controller.set_cookie 'herp', 'derp'
+      @controller.headers.should include 'Set-Cookie'
+      @controller.headers['Set-Cookie'].should == "foo=bar\nherp=derp"
+    end
+
+    it 'has no default expiry' do
+      @controller.set_cookie 'foo', 'bar'
+      @controller.headers['Set-Cookie'].should == 'foo=bar'
+    end
+
+    it 'accepts a :domain option' do
+      @controller.set_cookie('foo', 'bar', :domain => 'example.com')
+      header = @controller.headers['Set-Cookie']
+      header.should == 'foo=bar; domain=example.com'
+    end
+
+    it 'accepts a :path option' do
+      @controller.set_cookie('foo', 'bar', :path => 'example.com')
+      header = @controller.headers['Set-Cookie']
+      header.should == 'foo=bar; path=example.com'
+    end
+
+    it 'accepts a :secure option' do
+      @controller.set_cookie('foo', 'bar', :secure => true)
+      header = @controller.headers['Set-Cookie']
+      header.should == 'foo=bar; secure'
+    end
+
+    it 'accepts an :httponly option' do
+      @controller.set_cookie('foo', 'bar', :httponly => true)
+      header = @controller.headers['Set-Cookie']
+      header.should == 'foo=bar; HttpOnly'
+    end
+
+    it 'accepts an :expires Time' do
+      @controller.set_cookie('foo', 'bar', :expires => Time.at(1327789544))
+      header = @controller.headers['Set-Cookie']
+      header.should == 'foo=bar; expires=Sat, 28-Jan-2012 22:25:44 GMT'
+    end
+
+    it 'accepts any stringable value' do
+      derp = Object.new
+      def derp.to_s; 'derp'; end
+
+      @controller.set_cookie('herp', derp)
+      header = @controller.headers['Set-Cookie']
+      header.should == 'herp=derp'
+    end
+  end
+
   describe '#call' do
     before :each do
       @response = rand.to_s

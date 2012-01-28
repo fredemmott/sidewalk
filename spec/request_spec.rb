@@ -22,6 +22,25 @@ describe Sidewalk::Request do
     end
   end
 
+  describe '#cookies' do
+    it 'should be a Hash' do
+      @req.cookies.should be_a Hash
+    end
+
+    it 'should be empty if there were no cookie headers' do
+      @req.cookies.should be_empty
+    end
+
+    it 'should set an Array set-cookie header' do
+      @env['HTTP_COOKIE'] = 'foo=bar; herp=derp'
+      req = Sidewalk::Request.new(@env)
+      req.cookies.should include 'foo'
+      req.cookies['foo'].should == 'bar'
+      req.cookies.should include 'herp'
+      req.cookies['herp'].should == 'derp'
+    end
+  end
+
   describe '#http_version' do
     it 'returns "1.1" for HTTP/1.1 requests' do
       @req.http_version.should == '1.1'

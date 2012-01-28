@@ -44,6 +44,13 @@ module Sidewalk
       @headers ||= rack_environment.select{|k,v| k.start_with? 'HTTP_'}
     end
 
+    # Cookies provided by the client.
+    #
+    # @returns [Hash]
+    def cookies
+      rack_request.cookies
+    end
+
     # What version of HTTP the client is using.
     #
     # @return '1.1'

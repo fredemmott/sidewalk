@@ -1,5 +1,8 @@
-require 'continuation' unless RUBY_VERSION.start_with? '1.8.'
 require 'sidewalk/app_uri'
+
+require 'rack/utils'
+
+require 'continuation' unless RUBY_VERSION.start_with? '1.8.'
 
 module Sidewalk
   # Base class for page controllers.
@@ -46,6 +49,26 @@ module Sidewalk
     # want to +raise+ an instance of a subclass of {HttpError} or
     # {Redirect} instead.
     attr_accessor :status
+
+    # Set a cookie :)
+    #
+    # Valid options are:
+    # +:expires+:: accepts a +Time+. Default is a session cookie.
+    # +:secure+:: if +true+, only send the cookie via https
+    # +:httponly+:: do not allow Flash, JavaScript etc to access the cookie
+    # +:domain+:: restrict the cookie to only be available on a given
+    #             domain, and subdomains. Default is the request domain.
+    # +:path+:: make the cookie accessible to other paths - default is the
+    #           request path.
+    #
+    # @param key [String] is the name of the cookie to set
+    # @param value [Object] is the value to set - as long as it responds to
+    #   +#to_s+, it's fine.
+    def set_cookie key, value, options = {}
+      rack_value = options.dup
+      rack_value[:value] = value.to_s
+      Rack::Utils.set_cookie_header! self.headers, key.to_s, rack_value
+    end
 
     # What mime-type to return to the user agent.
     #
