@@ -17,7 +17,7 @@ describe Sidewalk::SeeOtherRedirect do
 
   describe '#url' do
     it 'returns the URL passed to the constructor' do
-      @redirect.url.should == @url
+      @redirect.url.to_s.should == @url.to_s
     end
   end
 

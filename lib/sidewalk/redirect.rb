@@ -8,16 +8,17 @@ module Sidewalk
     # Where to redirect to.
     attr_reader :url
 
-    protected
-
     # Initialize a Redirect.
+    #
+    # You probably don't want to use this directly - use
+    # {PermanentRedirect} or {SeeOtherRedirect} instead.
     #
     # @param [String, URI] url is where to redirect to
     # @param [Fixnum] status is a numeric HTTP status code
     # @param [String] description is a short description of the status
     #   code, such as 'Moved Permanently'
     def initialize url, status, description
-      @url = url
+      @url = url.to_s
       super status, description
     end
   end
