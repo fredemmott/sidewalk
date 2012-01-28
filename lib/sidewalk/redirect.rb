@@ -1,11 +1,21 @@
 require 'sidewalk/errors'
 
 module Sidewalk
+  # Base class for HTTP-level redirections.
+  #
+  # This, and its' subclasses are expected to be +raise+d.
   class Redirect < HttpError
+    # Where to redirect to.
     attr_reader :url
 
     protected
 
+    # Initialize a Redirect.
+    #
+    # @param [String, URI] url is where to redirect to
+    # @param [Fixnum] status is a numeric HTTP status code
+    # @param [String] description is a short description of the status
+    #   code, such as 'Moved Permanently'
     def initialize url, status, description
       @url = url
       super status, description
@@ -39,6 +49,10 @@ module Sidewalk
       super url, nil, nil
     end
 
+    # Return an appropriate status code.
+    #
+    # @return +303+ for HTTP/1.1 clients
+    # @return +302+ for HTTP/1.0 clients
     def status request
       if request.http_version == '1.1'
         303
@@ -47,6 +61,10 @@ module Sidewalk
       end
     end
 
+    # Return an appropriate description.
+    #
+    # @return 'See Other' for HTTP/1.1 clients
+    # @return 'Found' for HTTP/1.0 clients
     def description request
       case status(request)
       when 303

@@ -8,6 +8,9 @@ module Sidewalk
   # class needs to implement {#initialize} and {#call} in the same way as
   # this class. This class provides some added convenience.
   #
+  # You might want to look at {ControllerMixins} for some additional
+  # optional features.
+  #
   # To handle an URL, you will usually want to:
   # * subclass this
   # * implement {#response}
