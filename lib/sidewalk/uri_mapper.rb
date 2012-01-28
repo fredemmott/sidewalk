@@ -6,8 +6,62 @@ require 'active_support/inflector'
 module Sidewalk
   autoload :Application, 'sidewalk/application'
 
+  # Maps URIs to Controllers.
+  #
+  # Used to decide how to respond to a given HTTP request.
   class UriMapper
-    attr_reader :uri_map
+    # Initialize a UriMapper.
+    #
+    # This converts a convenient-to-write map into a fast-to-lookup map.
+    #
+    # The input hash takes +String+ regular expression patterns as keys,
+    # and values can either be another map, a {Controller} class (not an
+    # instance), a +Symbol+ or +String+ that is the name of a {Controller}
+    # class, or a +Proc+.
+    #
+    # If the value is a +String+, it will:
+    # * see if a +Class+ with the same name exists; if so, use that.
+    # * try to +require+ +foo_bar_controller.rb+ for 'FooBarController'
+    # * see if a +Class+ now exists with the same name
+    # * if so, done; if not, bail out.
+    #
+    # It looks for controller files in
+    # {Application#local_root}+/controllers+
+    #
+    # You usually won't interact with this class directly - instead you'll
+    # usually pass the input hash to {Sidewalk::Application}.
+    #
+    # Keys are required to be +String+s instead of +Regexp+s because they
+    # are converted to a +Sidewalk::+{Regexp} behind the scenes; this is
+    # is the same thing as a +::Regexp+ on Ruby 1.9, but on Ruby 1.8 it
+    # adds several additional features such as named captures.
+    #
+    # @example A Simple Map
+    #   urimap = {
+    #     '$' => :IndexController,
+    #     'hello$' => :HelloController,
+    #   }
+    #   run Sidewalk::Application.new(urimap)
+    #
+    # @example A Nested Map
+    #   urimap = {
+    #     '$' => :IndexController,
+    #     'foo/' => {
+    #       '$' => :FooController,
+    #       'bar$' => :FooBarController,
+    #     },
+    #   }
+    #   run Sidewalk::Application.new(urimap)
+    #
+    # @example A Map With Named Captures
+    #   urimap = {
+    #     '$' => :IndexController,
+    #     'foo/$' => :FooController,
+    #     '~(?<username>[^/]+)/$' => :UserController
+    #   }
+    #   run Sidewalk::Application.new(urimap)
+    #
+    # @param [Hash] uri_map
     def initialize uri_map = {}
       unless uri_map.is_a? Hash
         raise ArgumentError.new('URI map must be a Hash')
@@ -20,6 +74,10 @@ module Sidewalk
       $LOAD_PATH.pop
     end
 
+    # Given a path, find what should respond to it.
+    #
+    # @return [UriMatch] if something was found.
+    # @return [nil] if there is no match.
     def map path
       Sidewalk::UriMapper.map(
         [], #stack
@@ -27,6 +85,13 @@ module Sidewalk
         path
       )
     end
+
+    # The normalized URI map.
+    #
+    # @return [Hash<Regexp,(Controller|Proc)>]
+    attr_reader :uri_map
+
+    private
 
     # Convert uri_map from easy-to-write to fast-to-use.
     #
