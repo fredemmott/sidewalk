@@ -12,6 +12,38 @@ describe Sidewalk::Request do
     @req = Sidewalk::Request.new(@env)
   end
 
+  describe '#http_version' do
+    it 'returns "1.1" for HTTP/1.1 requests' do
+      @req.http_version.should == '1.1'
+    end
+
+    it 'returns "1.0" for HTTP/1.0 requests' do
+      @env['HTTP_VERSION'] = 'HTTP/1.0'
+      @env['SERVER_PROTOCOL'] = 'HTTP/1.0'
+      req = Sidewalk::Request.new(@env)
+      req.http_version.should == '1.0'
+    end
+
+    it 'should return nil if no version was specified' do
+      @env.delete 'HTTP_VERSION'
+      @env.delete 'SERVER_PROTOCOL'
+      req = Sidewalk::Request.new(@env)
+      req.http_version.should be_nil
+    end
+
+    it 'should work with just SERVER_PROTOCOL' do
+      @env.delete 'SERVER_PROTOCOL'
+      req = Sidewalk::Request.new(@env)
+      req.http_version.should == '1.1'
+    end
+
+    it 'should work with just HTTP_VERSION' do
+      @env.delete 'SERVER_PROTOCOL'
+      req = Sidewalk::Request.new(@env)
+      req.http_version.should == '1.1'
+    end
+  end
+
   describe '#initialize' do
     it 'can\'t be called without arguments' do
       lambda do

@@ -15,6 +15,13 @@ module Sidewalk
       initialize_uris
     end
 
+    def http_version
+      @http_version ||= [
+        'HTTP_VERSION',
+        'SERVER_PROTOCOL',
+      ].map{ |x| @env[x] }.find.first.to_s.split('/').last
+    end
+
     def root_uri
       @root_uri.dup
     end
