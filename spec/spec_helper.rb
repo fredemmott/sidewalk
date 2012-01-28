@@ -38,9 +38,17 @@ class OpenController < Sidewalk::Controller
     responder.call
   end
 
+  def uri_klass
+    @uri_klass ||= Sidewalk::AppUri
+  end
+
+  def uri_klass= klass
+    @uri_klass = klass
+  end
+
   def set_uri path, query = {}
     self.responder = lambda do
-      @app_uri = Sidewalk::AppUri.new(path, query)
+      @app_uri = uri_klass.new(path, query)
     end
   end
 
