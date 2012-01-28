@@ -1,7 +1,17 @@
 require 'rack/utils'
 
 module Sidewalk
+  # A URI relative to a specified root URI.
+  #
+  # You probably don't want to use this directly - see {AppUri} and
+  # {RelativeUri} for examples.
   module RootedUri
+    # Create a new URI, relative to the specified root.
+    #
+    # @param [URI::Common] root is the uri that you want to use as the base
+    # @param [String] path is the sub-path to add
+    # @param [Hash] query is a +Hash+ of key-values to add to the query
+    #   string.
     def self.new root, path, query = {}
       uri = root.dup
       root_path = uri.path
