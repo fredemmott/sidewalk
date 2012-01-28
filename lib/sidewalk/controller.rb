@@ -1,4 +1,5 @@
 require 'continuation' unless RUBY_VERSION.start_with? '1.8.'
+require 'sidewalk/app_uri'
 
 module Sidewalk
   # Base class for page controllers.
@@ -53,12 +54,6 @@ module Sidewalk
         return [status, {'Content-Type' => content_type}, [body]]
       end
       cc.call(self) if cc
-    end
-
-    def relative_uri path
-      uri = request.uri
-      uri.path += path
-      uri
     end
 
     # The body of the HTTP response to set.

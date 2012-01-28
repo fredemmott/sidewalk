@@ -1,4 +1,5 @@
 require 'sidewalk/controller_mixins/view_templates'
+require 'sidewalk/app_uri'
 
 class IndexController < Sidewalk::Controller
   # If this was a real app, you'd probably do this include in your
@@ -9,7 +10,7 @@ class IndexController < Sidewalk::Controller
   # Actually return some content
   def response
     @links = {
-      'Hello, world' => relative_uri('hello'),
+      'Hello, world' => Sidewalk::AppUri.new('/hello'),
     }
     render
   end

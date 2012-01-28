@@ -9,18 +9,6 @@ describe Sidewalk::Controller do
     end
   end
 
-  describe '#relative_uri' do
-    it 'gives a path relative to the request uri' do
-      uri = URI.parse('http://www.example.com/foo/')
-
-      request = Object.new
-      request.should_receive(:uri).and_return(uri)
-      
-      result = Sidewalk::Controller.new(request, nil).relative_uri('bar')
-      result.should == URI.parse('http://www.example.com/foo/bar')
-    end
-  end
-
   describe '#call' do
     before :each do
       @response = rand.to_s
