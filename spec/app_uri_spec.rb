@@ -28,24 +28,6 @@ describe Sidewalk::AppUri do
       it 'returns a URI underneath the root uri when a path is given' do
         @controller.call_uri('/bar').path.should == '/foo/bar'
       end
-
-      it 'does not append an empty query string' do
-        @controller.call_uri('/bar').to_s.should_not include '?'
-      end
-
-      it 'includes query parameters' do
-        @controller.call_uri(
-          '/bar',
-          'foo' => 'bar'
-        ).query.should == 'foo=bar'
-      end
-
-      it 'escapes query values' do
-        @controller.call_uri(
-          '/bar',
-          'foo&bar' => 'herp&derp'
-        ).query.should == 'foo%26bar=herp%26derp'
-      end
     end
   end
 end
