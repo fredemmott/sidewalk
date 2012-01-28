@@ -41,10 +41,22 @@ describe Sidewalk::Controller do
       status.should == 200
     end
 
+    it 'should return a different status code if overridden' do
+      @controller.status = 404
+      status, *junk = @controller.call
+      status.should == 404
+    end
+
     it 'should have a default content-type of text/html' do
       status, headers, body = @controller.call
       headers.should include 'Content-Type'
       headers['Content-Type'].should == 'text/html'
+    end
+
+    it 'should return a custom content-type if set' do
+      @controller.content_type = 'text/plain'
+      status, headers, body = @controller.call
+      headers['Content-Type'].should == 'text/plain'
     end
 
     it 'should return the result of #payload as the only content' do

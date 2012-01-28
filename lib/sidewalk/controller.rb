@@ -3,9 +3,12 @@ require 'continuation' unless RUBY_VERSION.start_with? '1.8.'
 module Sidewalk
   class Controller
     attr_reader :request, :logger
+    attr_accessor :status, :content_type
 
     def initialize request, logger
       @request, @logger = request, logger
+      @status = 200
+      @content_type = 'text/html'
     end
 
     def call
@@ -15,7 +18,7 @@ module Sidewalk
     end
 
     def response
-      [200, {'Content-Type' => 'text/html'}, [payload]]
+      [status, {'Content-Type' => content_type}, [payload]]
     end
 
     def relative_uri path
