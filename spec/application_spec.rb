@@ -4,7 +4,7 @@ require 'sidewalk/application'
 require 'sidewalk/controller'
 
 class FooController < Sidewalk::Controller
-  def payload
+  def response
     'whee'
   end
 end

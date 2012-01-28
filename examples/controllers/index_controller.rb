@@ -7,7 +7,7 @@ class IndexController < Sidewalk::Controller
   include Sidewalk::ControllerMixins::ViewTemplates
 
   # Actually return some content
-  def payload
+  def response
     @links = {
       'Hello, world' => relative_uri('hello'),
     }

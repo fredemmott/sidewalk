@@ -9,7 +9,7 @@ module Sidewalk
   #
   # To handle an URL, you will usually want to:
   # * subclass this
-  # * implement {#payload}
+  # * implement {#response}
   # * add your class to your application URI map.
   class Controller
     # The instance of {Request} corresponding to the current HTTP request.
@@ -34,13 +34,11 @@ module Sidewalk
     end
 
     def call
-      catch(:sidewalk_controller_current) do
-        return response
-      end.call(self)
-    end
-
-    def response
-      [status, {'Content-Type' => content_type}, [payload]]
+      cc = catch(:sidewalk_controller_current) do
+        body = self.response
+        return [status, {'Content-Type' => content_type}, [body]]
+      end
+      cc.call(self) if cc
     end
 
     def relative_uri path
@@ -49,7 +47,7 @@ module Sidewalk
       uri
     end
 
-    def payload
+    def response
       raise NotImplementedError.new
     end
 

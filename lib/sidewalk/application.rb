@@ -62,7 +62,7 @@ module Sidewalk
         # Normalize reponders to Procs
         if match.controller.is_a? Class
           responder = lambda do |request, logger|
-            match.controller.new(request, logger).response
+            match.controller.new(request, logger).call
           end
         else
           responder = match.controller
@@ -70,7 +70,6 @@ module Sidewalk
       else
         responder = lambda { |*args| raise NotFoundError.new }
       end
-
       request = Sidewalk::Request.new(env)
 
       # Try and call - but it can throw special exceptions that we

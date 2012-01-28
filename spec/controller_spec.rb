@@ -1,10 +1,10 @@
 require 'sidewalk/controller'
 
 describe Sidewalk::Controller do
-  describe '#payload' do
+  describe '#response' do
     it 'raises a NotImplementedError' do
       lambda{
-        Sidewalk::Controller.new(nil,nil).payload
+        Sidewalk::Controller.new(nil,nil).response
       }.should raise_error(NotImplementedError)
     end
   end
@@ -23,16 +23,16 @@ describe Sidewalk::Controller do
 
   describe '#call' do
     before :each do
-      @payload = rand.to_s
+      @response = rand.to_s
       @controller = Sidewalk::Controller.new(nil, nil)
       class <<@controller
-        attr_accessor :payload
+        attr_accessor :response
       end
-      @controller.payload = @payload
+      @controller.response = @response
     end
 
-    it 'should call #payload' do
-      @controller.should_receive(:payload).and_return(@payload)
+    it 'should call #response' do
+      @controller.should_receive(:response).and_return(@response)
       @controller.call
     end
 
@@ -59,22 +59,22 @@ describe Sidewalk::Controller do
       headers['Content-Type'].should == 'text/plain'
     end
 
-    it 'should return the result of #payload as the only content' do
+    it 'should return the result of #response as the only content' do
       status, headers, body = @controller.call
-      body.should == [@payload]
+      body.should == [@response]
     end
   end
 
   describe '.current' do
-    it 'should return nil if not called from #payload' do
+    it 'should return nil if not called from #response' do
       Sidewalk::Controller.current.should be_nil
     end
 
-    it 'should return the controller if called from #payload' do
+    it 'should return the controller if called from #response' do
       it = Sidewalk::Controller.new(nil, nil)
       class <<it
         attr_accessor :current
-        def payload
+        def response
           self.current = Sidewalk::Controller.current
         end
       end
@@ -83,13 +83,13 @@ describe Sidewalk::Controller do
     end
 
     context 'with two controllers active in the same thread' do
-      it 'should return the correct one from #payload' do
+      it 'should return the correct one from #response' do
         outer = Sidewalk::Controller.new(nil, nil)
         class <<outer
           attr_accessor :inner
           attr_accessor :pre
           attr_accessor :post
-          def payload
+          def response
             self.pre = Sidewalk::Controller.current
             inner.call
             self.post = Sidewalk::Controller.current
@@ -98,7 +98,7 @@ describe Sidewalk::Controller do
         inner = Sidewalk::Controller.new(nil, nil)
         class <<inner
           attr_accessor :current
-          def payload
+          def response
             self.current = Sidewalk::Controller.current
           end
         end
