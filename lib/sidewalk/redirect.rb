@@ -1,19 +1,14 @@
+require 'sidewalk/errors'
+
 module Sidewalk
-  class Redirect
+  class Redirect < HttpError
     attr_reader :url
-
-    def status request
-      @status
-    end
-
-    def description request
-      @description
-    end
 
     protected
 
     def initialize url, status, description
-      @url, @status, @description = url, status, description
+      @url = url
+      super status, description
     end
   end
 

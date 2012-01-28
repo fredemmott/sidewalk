@@ -49,6 +49,12 @@ describe Sidewalk::Application do
       @uri_map = {
         'class' => FooController,
         'proc' => @proc_responder,
+        'not_found' => lambda{ |*args| raise Sidewalk::NotFoundError.new },
+        'permanent_redirect' => lambda { |*args|
+          raise Sidewalk::PermanentRedirect.new(
+            'http://www.example.com/permanent_redirect'
+          )
+        },
       }
       @app = Sidewalk::Application.new(@uri_map)
     end
@@ -76,9 +82,33 @@ describe Sidewalk::Application do
     end
 
     it 'should return a status of 404 when given an invalid path' do
-      env = create_rack_env('PATH_INFO' => '/4oh4')
+      env = create_rack_env('PATH_INFO' => '/not_in_the_map')
       status, headers, parts = @app.call(env)
       status.should == 404
+    end
+
+    context 'when a NotFoundError is raised' do
+      it 'should give a status of 404' do
+        env = create_rack_env('PATH_INFO' => '/not_found')
+        status, *junk = @app.call(env)
+        status.should == 404
+      end
+    end
+
+    context 'when a PermanentRedirect is raised' do
+      before :each do
+        env = create_rack_env('PATH_INFO' => '/permanent_redirect')
+        @status, @headers, @body = @app.call(env)
+      end
+
+      it 'should give a status of 301' do
+        @status.should == 301
+      end
+
+      it 'should specify the correct location' do
+        @headers.should include 'Location'
+        @headers['Location'].should == 'http://www.example.com/permanent_redirect'
+      end
     end
   end
 end
