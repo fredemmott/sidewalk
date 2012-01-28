@@ -154,5 +154,15 @@ describe Sidewalk::UriMapper do
         Sidewalk::UriMapper.new(map)
       end.should raise_error(LoadError)
     end
+
+    it 'successfully loads controller classes if in $LOAD_PATH' do
+      lp = $LOAD_PATH.dup
+      $LOAD_PATH.push File.dirname(__FILE__) + '/data'
+      map = { '$' => :AutoloadedController }
+      lambda do
+        Sidewalk::UriMapper.new(map)
+      end.should_not raise_error
+      $LOAD_PATH.replace(lp)
+    end
   end
 end
