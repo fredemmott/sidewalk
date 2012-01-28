@@ -12,6 +12,16 @@ describe Sidewalk::Request do
     @req = Sidewalk::Request.new(@env)
   end
 
+  describe '#headers' do
+    it 'returns some headers' do
+      @req.headers.should_not be_empty
+    end
+
+    it 'only returns HTTP headers' do
+      @req.headers.all?{|k,v| k.start_with? 'HTTP_'}.should be_true
+    end
+  end
+
   describe '#http_version' do
     it 'returns "1.1" for HTTP/1.1 requests' do
       @req.http_version.should == '1.1'

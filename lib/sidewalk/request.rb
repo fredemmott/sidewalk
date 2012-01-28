@@ -37,6 +37,13 @@ module Sidewalk
       initialize_uris
     end
 
+    # The HTTP headers.
+    #
+    # This does not include Rack/CGI variables - just real HTTP headers.
+    def headers
+      @headers ||= rack_environment.select{|k,v| k.start_with? 'HTTP_'}
+    end
+
     # What version of HTTP the client is using.
     #
     # @return '1.1'
