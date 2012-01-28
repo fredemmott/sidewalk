@@ -1,5 +1,5 @@
 require 'sidewalk/controller'
-require 'sidewalk/relative_uri'
+require 'sidewalk/rooted_uri'
 require 'sidewalk/request'
 
 module Sidewalk
@@ -11,7 +11,7 @@ module Sidewalk
       end
       uri = context.request.root_uri
 
-      Sidewalk::RelativeUri.new(uri, path, query)
+      Sidewalk::RootedUri.new(uri, path, query)
     end
   end
 end

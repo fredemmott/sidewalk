@@ -1,7 +1,7 @@
 require 'rack/utils'
 
 module Sidewalk
-  module RelativeUri
+  module RootedUri
     def self.new root, path, query = {}
       uri = root.dup
       root_path = uri.path
