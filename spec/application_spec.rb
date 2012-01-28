@@ -3,12 +3,6 @@ require 'spec_helper'
 require 'sidewalk/application'
 require 'sidewalk/controller'
 
-class FooController < Sidewalk::Controller
-  def response
-    'whee'
-  end
-end
-
 describe Sidewalk::Application do
   describe '.local_root' do
     it 'should return the working directory' do
@@ -47,7 +41,7 @@ describe Sidewalk::Application do
       @request, @logger = nil, nil
       @proc_responder = lambda{ |*args| @request, @logger = *args; :herp }
       @uri_map = {
-        'class' => FooController,
+        'class' => HelloController,
         'proc' => @proc_responder,
         'not_found' => lambda{ |*args| raise Sidewalk::NotFoundError.new },
         'permanent_redirect' => lambda { |*args|
@@ -63,7 +57,7 @@ describe Sidewalk::Application do
       env = create_rack_env('PATH_INFO' => '/class')
       status, headers, body = @app.call(env)
       status.should == 200
-      body.join('').should == 'whee'
+      body.join('').should == 'Hello, World!'
     end
 
     it 'should support Proc responders' do

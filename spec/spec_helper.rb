@@ -19,3 +19,34 @@ unless RUBY_VERSION.start_with? '1.8.'
     add_filter '/lib/sidewalk/regexp.rb' # 1.8 vs 1.9
   end
 end
+
+require 'sidewalk/controller'
+
+class NotARealController
+end
+
+class HelloController < Sidewalk::Controller
+  def response
+    'Hello, World!'
+  end
+end
+
+class OpenController < Sidewalk::Controller
+  attr_accessor :responder
+  attr_reader :app_uri
+  def response
+    responder.call
+  end
+
+  def set_uri path, query = {}
+    self.responder = lambda do
+      @app_uri = Sidewalk::AppUri.new(path, query)
+    end
+  end
+
+  def call_uri path, query = {}
+    self.set_uri path, query
+    self.call
+    self.app_uri
+  end
+end

@@ -1,7 +1,6 @@
 require 'sidewalk/controller'
+require 'sidewalk/relative_uri'
 require 'sidewalk/request'
-
-require 'rack/utils'
 
 module Sidewalk
   module AppUri
@@ -12,19 +11,7 @@ module Sidewalk
       end
       uri = context.request.root_uri
 
-      root_path = uri.path
-      root_path = root_path[0..-2] if root_path.end_with? '/'
-      uri.path = root_path + path
-
-      query_string = query.map do |k,v|
-        '%s=%s' % [
-          Rack::Utils.escape(k.to_s),
-          Rack::Utils.escape(v.to_s),
-        ]
-      end.join('&')
-      uri.query = query_string unless query.empty?
-
-      uri
+      Sidewalk::RelativeUri.new(uri, path, query)
     end
   end
 end

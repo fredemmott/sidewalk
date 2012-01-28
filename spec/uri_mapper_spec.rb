@@ -1,9 +1,6 @@
 require 'spec_helper'
 require 'sidewalk/uri_mapper'
 
-class FooController
-end
-
 describe Sidewalk::UriMapper do
   it 'can be default-constructed' do
     lambda { Sidewalk::UriMapper.new }.should_not raise_error
@@ -139,13 +136,13 @@ describe Sidewalk::UriMapper do
 
   context 'autoloading' do
     it 'converts symbols to classes' do
-      map = { '$' => :FooController }
-      Sidewalk::UriMapper.new(map).uri_map.values.should include FooController
+      map = { '$' => :NotARealController }
+      Sidewalk::UriMapper.new(map).uri_map.values.should include NotARealController
     end
 
     it 'converts strings to classes' do
-      map = { '$' => 'FooController' }
-      Sidewalk::UriMapper.new(map).uri_map.values.should include FooController
+      map = { '$' => 'NotARealController' }
+      Sidewalk::UriMapper.new(map).uri_map.values.should include NotARealController
     end
 
     it 'attempts to require controller classes' do
