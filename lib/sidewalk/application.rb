@@ -130,15 +130,13 @@ module Sidewalk
             'Content-Type' => 'text/plain',
             'Location' => error.url,
           },
-          "#{error.status(request)} #{error.description(request)}"
+          ["#{error.status(request)} #{error.description(request)}"]
         ]
       when HttpError
         [
           error.status(request),
-          {
-            'Content-Type' => 'text/plain',
-          },
-          "#{error.status(request)} #{error.description(request)}"
+          {'Content-Type' => 'text/plain'},
+          ["#{error.status(request)} #{error.description(request)}"]
         ]
       else
         nil

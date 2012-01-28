@@ -93,6 +93,16 @@ describe Sidewalk::Application do
         status, *junk = @app.call(env)
         status.should == 404
       end
+
+      it 'should look like a Rack response' do
+        env = create_rack_env('PATH_INFO' => '/not_found')
+        status, headers, body = @app.call(env)
+        status.should be_a Fixnum
+        headers.should be_a Hash
+        headers.should include 'Content-Type'
+        body.should respond_to :each
+        body.each.first.should be_a String
+      end
     end
 
     context 'when a PermanentRedirect is raised' do
@@ -108,6 +118,14 @@ describe Sidewalk::Application do
       it 'should specify the correct location' do
         @headers.should include 'Location'
         @headers['Location'].should == 'http://www.example.com/permanent_redirect'
+      end
+
+      it 'should look like a Rack response' do
+        @status.should be_a Fixnum
+        @headers.should be_a Hash
+        @headers.should include 'Content-Type'
+        @body.should respond_to :each
+        @body.each.first.should be_a String
       end
     end
   end
