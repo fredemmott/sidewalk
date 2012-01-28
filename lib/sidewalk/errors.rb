@@ -27,7 +27,7 @@ module Sidewalk
   #
   # Providing authentication headers will not help.
   class ForbiddenError < HttpError
-    def initalize
+    def initialize
       super 403, 'Forbidden'
     end
   end
