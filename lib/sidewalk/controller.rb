@@ -3,6 +3,7 @@ require 'sidewalk/app_uri'
 require 'rack/utils'
 
 require 'continuation' unless RUBY_VERSION.start_with? '1.8.'
+require 'time' # Rack::Utils.set_cookie_header! on Ruby 1.8
 
 module Sidewalk
   # Base class for page controllers.
