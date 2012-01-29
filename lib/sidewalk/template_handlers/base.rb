@@ -1,6 +1,6 @@
 module Sidewalk
   module TemplateHandlers
-    class TemplateHandler
+    class Base
       def render controller
         raise NotImplementedError.new
       end

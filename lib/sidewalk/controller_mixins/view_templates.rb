@@ -9,8 +9,7 @@ module Sidewalk
     # This provides {#render}, which looks in views/ for a suitably named
     # file, such as +views/my_controller.erb' for MyController.
     #
-    # See {TemplateHandlers::TemplateHandler} for a list of supported
-    # template formats.
+    # See {TemplateHandlers::Base} for a list of supported formats.
     module ViewTemplates
       # The local path where templates are stored
       #
@@ -23,13 +22,13 @@ module Sidewalk
         )
       end
 
-      # What {TemplateHandler} to use for a given extension.
+      # What handler to use for a given extension.
       #
       # @example ERB
       #   erb_handler = Sidewalk::ViewTemplates.handler('erb')
       #   erb_handler.should == Sidewalk::TemplateHandlers::ErbHandler
       #
-      # @return [Class] a {TemplateHandlers::TemplateHandler} subclass.
+      # @return [Class] a {TemplateHandlers::Base} subclass.
       def self.handler type
         name = type.camelize + 'Handler'
         begin
@@ -40,18 +39,16 @@ module Sidewalk
         end
       end
 
-      # Get a {TemplateHandlers::TemplateHandler} instance for a given
-      # path.
+      # Get a {TemplateHandlers::Base} instance for a given path.
       #
-      # @return [TemplateHandlers::TemplateHandler]
+      # @return [TemplateHandlers::Base]
       def self.template path
         self.templates[path.to_s]
       end
 
       # A +Hash+ of all available templates.
       #
-      # @return [Hash] a +path+ +=>+ {TemplateHandlers::TemplateHandler}
-      #   map.
+      # @return [Hash] a +path+ +=>+ {TemplateHandlers::Base} map.
       def self.templates
         return @templates if @templates
 

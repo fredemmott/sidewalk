@@ -1,10 +1,10 @@
-require 'sidewalk/template_handlers/template_handler'
+require 'sidewalk/template_handlers/base'
 
 require 'erb'
 
 module Sidewalk
   module TemplateHandlers
-    class ErbHandler < TemplateHandler
+    class ErbHandler < Base
       def initialize path
         super path
         @template = ERB::new(File.read(path))
