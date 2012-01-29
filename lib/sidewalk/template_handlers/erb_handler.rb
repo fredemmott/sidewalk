@@ -5,6 +5,7 @@ require 'erb'
 
 module Sidewalk
   module TemplateHandlers
+    # Handler for ERB Templates.
     class ErbHandler < Base
       def initialize path
         super path
