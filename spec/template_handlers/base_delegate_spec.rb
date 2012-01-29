@@ -17,4 +17,11 @@ describe Sidewalk::TemplateHandlers::BaseDelegate do
     foo.should == :bar
     herp.should == :derp
   end
+
+  describe '#render' do
+    it 'raises a NotImplementedError' do
+      delegate = Sidewalk::TemplateHandlers::BaseDelegate.new(nil)
+      lambda{delegate.render}.should raise_error(NotImplementedError)
+    end
+  end
 end
