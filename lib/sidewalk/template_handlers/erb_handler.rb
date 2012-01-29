@@ -1,4 +1,5 @@
 require 'sidewalk/template_handlers/base'
+require 'sidewalk/template_handlers/base_delegate'
 
 require 'erb'
 
@@ -8,6 +9,7 @@ module Sidewalk
       def initialize path
         super path
         @template = ERB::new(File.read(path))
+        @template.filename = path
       end
 
       def render controller
@@ -19,23 +21,14 @@ module Sidewalk
       # Using a delegate so we can add extra methods to the binding
       # without polluting the class - for example, most people expect an
       # ERB template to have access to ERB::Util#h
-      class Delegate
+      class Delegate < BaseDelegate
         # Pull in '#html_escape' aka '#h
         include ERB::Util
 
         def initialize template, controller
-          controller.instance_variables.each do |name|
-            self.instance_variable_set(
-              name,
-              controller.instance_variable_get(name)
-            )
-          end
+          p [__FILE__, __LINE__]
           @template = template
-          @controller = controller
-        end
-
-        def method_missing *args
-          @controller.send *args
+          super controller
         end
 
         def render
