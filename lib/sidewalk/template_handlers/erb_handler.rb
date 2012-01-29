@@ -26,7 +26,6 @@ module Sidewalk
         include ERB::Util
 
         def initialize template, controller
-          p [__FILE__, __LINE__]
           @template = template
           super controller
         end
