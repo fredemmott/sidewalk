@@ -7,7 +7,7 @@ module Sidewalk
     # Mixin for supporting view templates.
     #
     # This provides {#render}, which looks in views/ for a suitably named
-    # file, such as +views/my_controller.erb' for MyController.
+    # file, such as +views/hello.erb' for HelloController.
     #
     # See {TemplateHandlers::Base} for a list of supported formats.
     module ViewTemplates
@@ -28,6 +28,7 @@ module Sidewalk
       #   erb_handler = Sidewalk::ViewTemplates.handler('erb')
       #   erb_handler.should == Sidewalk::TemplateHandlers::ErbHandler
       #
+      # @param [String] a filename extension.
       # @return [Class] a {TemplateHandlers::Base} subclass.
       def self.handler type
         name = type.camelize + 'Handler'
@@ -83,6 +84,9 @@ module Sidewalk
       def render view = nil
         view ||= self.class.name.sub('Controller', '').underscore
         template = Sidewalk::ControllerMixins::ViewTemplates.template(view)
+        if template.nil?
+          raise ScriptError.new("Unable to find a template for #{view}")
+        end
         template.render(self)
       end
     end
