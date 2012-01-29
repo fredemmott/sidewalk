@@ -5,8 +5,6 @@ module Sidewalk
         raise NotImplementedError.new
       end
 
-      protected
-
       def initialize path
       end
     end
