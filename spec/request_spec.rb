@@ -27,6 +27,11 @@ describe Sidewalk::Request do
       @req.cookies.should be_a Hash
     end
 
+    it 'should be mutable' do
+      @req.cookies['herp'] = 'derp'
+      @req.cookies['herp'].should == 'derp'
+    end
+
     it 'should be empty if there were no cookie headers' do
       @req.cookies.should be_empty
     end
