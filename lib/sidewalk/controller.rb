@@ -122,4 +122,20 @@ module Sidewalk
       end
     end
   end
+
+  # Optional extension features to the Controller class.
+  #
+  # @example Adding +#render+ and supporting +views/+
+  #   class MyController < Sidewalk::Controller
+  #     include Sidewalk::ControllerMixins::ViewTemplates
+  #     def response
+  #       # Look for 'views/my_controller.*' - for example,
+  #       # 'views/my_controller.erb' would be rendered with ERB if
+  #       # present.
+  #       render
+  #     end
+  #   end
+  module ControllerMixins
+    # see controller_mixins/
+  end
 end
