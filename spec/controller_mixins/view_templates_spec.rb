@@ -15,6 +15,21 @@ describe Sidewalk::ControllerMixins::ViewTemplates do
     it 'should find ErbHandler for "erb"' do
       ViewTemplates.handler('erb').name.should == 'Sidewalk::TemplateHandlers::ErbHandler'
     end
+
+    it 'should raise a LoadError for an invalid template type' do
+      lambda{ViewTemplates.handler('_________')}.should raise_error
+    end
+
+    it 'should auto-require a handler if possible' do
+      lambda{ViewTemplates.handler('foo')}.should raise_error
+      begin
+        $LOAD_PATH.push File.expand_path('./lib', File.dirname(__FILE__))
+        handler = ViewTemplates.handler('foo')
+        handler.name.should == 'Sidewalk::TemplateHandlers::FooHandler'
+      ensure
+        $LOAD_PATH.pop
+      end
+    end
   end
 
   describe '#template' do
