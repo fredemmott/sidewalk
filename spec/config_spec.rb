@@ -4,7 +4,10 @@ require 'sidewalk/config'
 
 describe Sidewalk::Config do
   it 'raises an error if no environment is set.' do
+    orig_env = ENV['RACK_ENV'];
+    ENV['RACK_ENV'] = nil
     lambda{Sidewalk::Config.new('.')}.should raise_error
+    ENV['RACK_ENV'] = orig_env
   end
 
   context 'with environment set to "production"' do
