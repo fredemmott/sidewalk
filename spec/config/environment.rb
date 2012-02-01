@@ -1,0 +1,1 @@
+$LOADED_ENVIRONMENT_RB = true
