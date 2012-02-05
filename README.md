@@ -3,13 +3,83 @@
 What is this?
 =============
 
-A lightweight web framework that is in too early a stage of development to
-be interesting to you right now.
-
-It is heavily influenced by
+A lightweight web framework for Ruby, heavily influenced by
 [Aphront](https://github.com/facebook/phabricator/tree/master/src/aphront).
 
-Additional Warning
-==================
+There are 3 main components to a Sidewalk application:
 
-Application, Controller, and examples/ are not even close to a final API.
+* Several {Sidewalk::Controller}s
+* The {Sidewalk::Application}
+* A URI-map; this is a hash where the keys are Strings containing regexp
+  patterns, and the values are Controller classes, or their names
+  (Strings or Symbols).
+
+URI's are mapped from String regexp patterns to make things more
+compatible between Ruby 1.8 and Ruby 1.9; under 1.9, this is mapped on to
+the standard Regexp class, but in 1.8, Sidewalk depends on Oniguruma
+and uses that instead.
+
+Hello, World
+============
+
+In the form of a 'config.ru':
+
+````ruby
+require 'sidewalk'
+
+class HelloController < Sidewalk::Controller
+  def response
+    "Hello, world."
+  end
+end
+
+urimap = {
+  '$' => :HelloController,
+}
+
+run Sidewalk::Application.new(urimap)
+````
+
+{Sidewalk::ControllerMixins::ViewTemplates} provides a {#render} method that
+acts like you expect, and you're probably also interested in
+{Sidewalk::Request} and {Sidewalk::Controller}.
+
+What about variables in the URLs?
+=================================
+
+Use standard named captures - for example, this provides an 'id' parameter
+
+````ruby
+urimap = {
+  '$' => :IndexController,
+  'posts/' => {
+    '$' => :PostsController,
+    '(?<id>\d+)$' => :PostController,
+  }
+}
+````
+
+What's different compared to Rails?
+===================================
+
+Some major differences compared to Rails:
+
+* There's much less of it. This has its' good sides, but it also means
+  less features.
+* There is no standard layout for URLs - it's entirely up to you.
+* Each controller deals with one URL. This is by comparison to one
+  controller class dealing with /foo/ and /foo/123
+* Parameters in the url are standard named regular expression captures - no
+  custom syntax.
+* By default, there's no explicit view support - include
+  {Sidewalk::ControllerMixins::ViewTemplates} to get support for ERB, HAML,
+  and RXhp - and it's easy to add support for other languages.
+
+There is little magic, and you don't need to use it:
+
+* Sidewalk will automatically load config/environment.rb and
+  config/production|testing|development.rb as appropriate
+* It will also load any similarly-named .yaml files into the
+  {Sidewalk::Config} hash
+* If you put 'FooController' in your URI-map, but don't require, Sidewalk
+  will look for it in controllers
