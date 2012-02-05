@@ -1,0 +1,5 @@
+html do
+  body do
+    text 'herp'
+  end
+end
