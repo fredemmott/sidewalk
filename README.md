@@ -14,8 +14,8 @@ A lightweight web framework for Ruby, heavily influenced by
 
 There are 3 main components to a Sidewalk application:
 
-* Several {Sidewalk::Controller}s
-* The {Sidewalk::Application}
+* Several Controllers
+* The Application
 * A URI-map; this is a hash where the keys are Strings containing regexp
   patterns, and the values are Controller classes, or their names
   (Strings or Symbols).
@@ -46,9 +46,9 @@ urimap = {
 run Sidewalk::Application.new(urimap)
 ````
 
-{Sidewalk::ControllerMixins::ViewTemplates} provides a {#render} method that
+Sidewalk::ControllerMixins::ViewTemplates provides a #render method that
 acts like you expect, and you're probably also interested in
-{Sidewalk::Request} and {Sidewalk::Controller}.
+Sidewalk::Request and Sidewalk::Controller.
 
 What about variables in the URLs?
 =================================
@@ -78,7 +78,7 @@ Some major differences compared to Rails:
 * Parameters in the url are standard named regular expression captures - no
   custom syntax.
 * By default, there's no explicit view support - include
-  {Sidewalk::ControllerMixins::ViewTemplates} to get support for ERB, HAML,
+  Sidewalk::ControllerMixins::ViewTemplates to get support for ERB, HAML,
   and RXhp - and it's easy to add support for other languages.
 
 There is little magic, and you don't need to use it:
@@ -86,6 +86,6 @@ There is little magic, and you don't need to use it:
 * Sidewalk will automatically load config/environment.rb and
   config/production|testing|development.rb as appropriate
 * It will also load any similarly-named .yaml files into the
-  {Sidewalk::Config} hash
+  Sidewalk::Config hash
 * If you put 'FooController' in your URI-map, but don't require, Sidewalk
   will look for it in controllers
