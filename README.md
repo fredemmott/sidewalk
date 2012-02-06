@@ -1,5 +1,11 @@
 [![build status](https://secure.travis-ci.org/fredemmott/sidewalk.png)](http://travis-ci.org/fredemmott/sidewalk) [![dependency status](https://gemnasium.com/fredemmott/sidewalk.png)](https://gemnasium.com/fredemmott/sidewalk)
 
+Is this usable?
+===============
+
+I'm not aware of anyone (including myself) using it in production yet. Here
+be dragons.
+
 What is this?
 =============
 
