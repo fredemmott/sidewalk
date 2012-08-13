@@ -181,9 +181,9 @@ module Sidewalk
           "env doesn't specify a Rack version"
         )
       end
-      if @rack_version != [1, 1]
+      if ! [[1, 0], [1, 1]].include? @rack_version
         raise ArgumentError.new(
-          "Expected Rack version [1, 1], got #{@rack_version}"
+          "Expected Rack version [1, 0] or [1, 1], got #{@rack_version}"
         )
       end
     end
