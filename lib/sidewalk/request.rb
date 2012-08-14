@@ -51,6 +51,11 @@ module Sidewalk
       rack_request.cookies
     end
 
+    # Whether or not this is an asynchronous (AJAX) request.
+    def asynchronous?
+      @rack_request.xhr?
+    end
+
     # What version of HTTP the client is using.
     #
     # @return '1.1'
