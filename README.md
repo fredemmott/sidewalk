@@ -73,8 +73,8 @@ Some major differences compared to Rails:
 * There's much less of it. This has its' good sides, but it also means
   less features.
 * There is no standard layout for URLs - it's entirely up to you.
-* Each controller deals with one URL. This is by comparison to one
-  controller class dealing with /foo/ and /foo/123
+* Each controller deals with one kind of page. This is by comparison to the
+  same controller class being responsible for both /foo/ and /foo/123
 * Parameters in the url are standard named regular expression captures - no
   custom syntax.
 * By default, there's no explicit view support - include
@@ -88,4 +88,4 @@ There is little magic, and you don't need to use it:
 * It will also load any similarly-named .yaml files into the
   Sidewalk::Config hash
 * If you put 'FooController' in your URI-map, but don't require, Sidewalk
-  will look for it in controllers
+  will look for it in controllers/
